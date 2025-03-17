@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recovery Journey Tracker</title>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --secondary: #06B6D4;
+            --success: #10B981;
+            --background: #F9FAFB;
+            --surface: #FFFFFF;
+            --text: #1F2937;
+            --text-muted: #6B7280;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            flex: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        
+        .card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .days-counter {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .days-label {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+        
+        .streak-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .button-danger {
+            background-color: #EF4444;
+        }
+        
+        .button-danger:hover {
+            background-color: #DC2626;
+        }
+        
+        .button-secondary {
+            background-color: #F3F4F6;
+            color: var(--text);
+            margin-left: 0.5rem;
+        }
+        
+        .button-secondary:hover {
+            background-color: #E5E7EB;
+        }
+        
+        .milestones {
+            margin-top: 1rem;
+        }
+        
+        .milestone {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background-color: #F3F4F6;
+        }
+        
+        .milestone-day {
+            font-weight: 600;
+            margin-right: 0.5rem;
+            color: var(--primary);
+            min-width: 40px;
+        }
+        
+        .milestone-complete {
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        
+        .milestone-complete .milestone-day {
+            color: var(--success);
+        }
+        
+        .quote {
+            font-style: italic;
+            color: var(--text-muted);
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--surface);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .days-counter {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Recovery Journey</h1>
+            <p class="subtitle">Track your progress and stay focused on your goal</p>
+        </header>
+        
+        <div class="card">
+            <div class="days-counter" id="days-count">0</div>
+            <div class="days-label">Days of freedom</div>
+            <p class="streak-info" id="streak-info">Your journey begins today!</p>
+            
+            <button class="button" id="milestone-btn">Add a milestone</button>
+            <button class="button button-danger" id="reset-btn">Reset counter</button>
+        </div>
+        
+        <div class="card">
+            <h2>Your milestones</h2>
+            <div class="milestones" id="milestones-list">
+                <div class="milestone">
+                    <span class="milestone-day">1</span>
+                    <span>First day completed</span>
+                </div>
+                <div class="milestone">
+                    <span class="milestone-day">7</span>
+                    <span>One week milestone</span>
+                </div>
+                <div class="milestone">
+                    <span class="milestone-day">30</span>
+                    <span>One month strong</span>
+                </div>
+                <div class="milestone">
+                    <span class="milestone-day">90</span>
+                    <span>90-day transformation</span>
+                </div>
+            </div>
+        </div>
+        
+        <p class="quote">"Every day is a new opportunity to improve yourself. Don't give up."</p>
+    </div>
+    
+    <footer>
+        Recovery Journey Tracker &copy; 2025
+    </footer>
+
+    <script>
+        // Get the current date in YYYY-MM-DD format
+        function getCurrentDate() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+        
+        // Calculate days between two dates
+        function daysBetween(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+        
+        // Load start date from localStorage or set to today
+        function loadStartDate() {
+            const saved = localStorage.getItem('recoveryStartDate');
+            if (saved) {
+                return saved;
+            } else {
+                const today = getCurrentDate();
+                localStorage.setItem('recoveryStartDate', today);
+                return today;
+            }
+        }
+        
+        // Update the counter
+        function updateCounter() {
+            const startDate = loadStartDate();
+            const today = getCurrentDate();
+            const days = daysBetween(startDate, today);
+            
+            document.getElementById('days-count').textContent = days;
+            
+            // Update streak info text
+            const streakInfo = document.getElementById('streak-info');
+            if (days === 0) {
+                streakInfo.textContent = 'Your journey begins today!';
+            } else if (days === 1) {
+                streakInfo.textContent = 'You completed your first day!';
+            } else {
+                streakInfo.textContent = `Started on ${new Date(startDate).toLocaleDateString()}`;
+            }
+            
+            // Update milestones
+            updateMilestones(days);
+        }
+        
+        // Update milestones based on current streak
+        function updateMilestones(currentDays) {
+            const milestones = document.querySelectorAll('.milestone');
+            milestones.forEach(milestone => {
+                const daySpan = milestone.querySelector('.milestone-day');
+                const targetDay = parseInt(daySpan.textContent);
+                
+                if (currentDays >= targetDay) {
+                    milestone.classList.add('milestone-complete');
+                } else {
+                    milestone.classList.remove('milestone-complete');
+                }
+            });
+        }
+        
+        // Reset the counter
+        function resetCounter() {
+            if (confirm('Are you sure you want to reset your counter? This will set today as your new start date.')) {
+                const today = getCurrentDate();
+                localStorage.setItem('recoveryStartDate', today);
+                updateCounter();
+            }
+        }
+        
+        // Add a custom milestone
+        function addMilestone() {
+            const targetDay = prompt('Enter the day for your milestone:');
+            const description = prompt('Enter a description for this milestone:');
+            
+            if (targetDay && description) {
+                const milestone = document.createElement('div');
+                milestone.className = 'milestone';
+                
+                const daySpan = document.createElement('span');
+                daySpan.className = 'milestone-day';
+                daySpan.textContent = targetDay;
+                
+                const descSpan = document.createElement('span');
+                descSpan.textContent = description;
+                
+                milestone.appendChild(daySpan);
+                milestone.appendChild(descSpan);
+                
+                document.getElementById('milestones-list').appendChild(milestone);
+                
+                // Check if this milestone is already complete
+                const currentDays = daysBetween(loadStartDate(), getCurrentDate());
+                if (currentDays >= parseInt(targetDay)) {
+                    milestone.classList.add('milestone-complete');
+                }
+                
+                // Save to localStorage
+                saveMilestones();
+            }
+        }
+        
+        // Save milestones to localStorage
+        function saveMilestones() {
+            const milestones = [];
+            document.querySelectorAll('.milestone').forEach(milestone => {
+                const day = milestone.querySelector('.milestone-day').textContent;
+                const desc = milestone.querySelector('span:nth-child(2)').textContent;
+                milestones.push({ day, desc });
+            });
+            
+            localStorage.setItem('recoveryMilestones', JSON.stringify(milestones));
+        }
+        
+        // Load milestones from localStorage
+        function loadMilestones() {
+            const saved = localStorage.getItem('recoveryMilestones');
+            if (saved) {
+                const milestones = JSON.parse(saved);
+                const container = document.getElementById('milestones-list');
+                container.innerHTML = '';
+                
+                milestones.forEach(item => {
+                    const milestone = document.createElement('div');
+                    milestone.className = 'milestone';
+                    
+                    const daySpan = document.createElement('span');
+                    daySpan.className = 'milestone-day';
+                    daySpan.textContent = item.day;
+                    
+                    const descSpan = document.createElement('span');
+                    descSpan.textContent = item.desc;
+                    
+                    milestone.appendChild(daySpan);
+                    milestone.appendChild(descSpan);
+                    container.appendChild(milestone);
+                });
+                
+                // Update milestone statuses
+                const currentDays = daysBetween(loadStartDate(), getCurrentDate());
+                updateMilestones(currentDays);
+            }
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up reset button
+            document.getElementById('reset-btn').addEventListener('click', resetCounter);
+            
+            // Set up milestone button
+            document.getElementById('milestone-btn').addEventListener('click', addMilestone);
+            
+            // Load milestones
+            loadMilestones();
+            
+            // Update counter on page load
+            updateCounter();
+        });
+    </script>
+</body>
+</html>
