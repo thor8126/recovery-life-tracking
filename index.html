@@ -129,6 +129,12 @@
             padding: 0.75rem;
             border-radius: 8px;
             background-color: #F3F4F6;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .milestone:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         
         .milestone-day {
@@ -138,12 +144,63 @@
             min-width: 40px;
         }
         
+        .milestone-delete {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: transparent;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            font-size: 1.1rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+        
+        .milestone-delete:hover {
+            opacity: 1;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+        }
+        
         .milestone-complete {
             background-color: rgba(16, 185, 129, 0.1);
+            border-left: 3px solid var(--success);
+            transform: scale(1.02);
         }
         
         .milestone-complete .milestone-day {
             color: var(--success);
+        }
+        
+        .achievement-message {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .quote {
@@ -161,20 +218,88 @@
             font-size: 0.875rem;
         }
         
-        /* Fixed Flip Clock Styles */
+        /* Confetti Animation */
+        @keyframes confetti-slow {
+            0% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0); }
+            100% { transform: translate3d(25px, 105vh, 0) rotateX(360deg) rotateY(180deg); }
+        }
+        
+        @keyframes confetti-medium {
+            0% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0); }
+            100% { transform: translate3d(100px, 105vh, 0) rotateX(100deg) rotateY(360deg); }
+        }
+        
+        @keyframes confetti-fast {
+            0% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0); }
+            100% { transform: translate3d(-50px, 105vh, 0) rotateX(10deg) rotateY(250deg); }
+        }
+        
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffd700;
+            opacity: 0.7;
+            top: -10px;
+        }
+        
+        .confetti.slow {
+            animation: confetti-slow 3.25s linear 1 forwards;
+        }
+        
+        .confetti.medium {
+            animation: confetti-medium 2.75s linear 1 forwards;
+        }
+        
+        .confetti.fast {
+            animation: confetti-fast 2.25s linear 1 forwards;
+        }
+
+        /* Enhanced Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: #E5E7EB;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 0.5s ease;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        /* Flip Clock Styles - REVISED */
         .flip-clock {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 5px;
             margin: 0 auto 1.5rem;
-            flex-wrap: wrap;
+            flex-wrap: nowrap; /* Never wrap to ensure single row */
         }
         
         .flip-clock-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 0 3px;
+            margin: 0 2px;
         }
         
         .flip-clock-label {
@@ -191,7 +316,7 @@
             justify-content: center;
             align-items: center;
             height: 60px;
-            margin: 0 2px;
+            margin: 0 1px;
         }
         
         .flip-clock-divider span {
@@ -205,7 +330,7 @@
         .flip-card {
             display: block;
             position: relative;
-            width: 46px;
+            width: 44px;
             height: 60px;
             perspective: 400px;
             margin: 0 1px;
@@ -229,6 +354,7 @@
         .flip-card-back-top {
             top: 0;
             border-radius: 5px 5px 0 0;
+            border-bottom: 0;
         }
         
         .flip-card-bottom,
@@ -266,90 +392,116 @@
         .flip-card-top {
             z-index: 3;
             backface-visibility: hidden;
+            transform-origin: bottom center;
         }
         
         .flip-card-back-top {
             z-index: 1;
             transform: rotateX(180deg);
             backface-visibility: hidden;
+            transform-origin: bottom center;
+        }
+        
+        .flip-card-bottom {
+            z-index: 2;
+            transform-origin: top center;
         }
         
         .flip-card-back-bottom {
-            z-index: 2;
+            z-index: 0;
+            transform-origin: top center;
         }
         
-        .flip-card.flipping .flip-card-top {
-            animation: flipTop 0.5s ease-in-out;
-            transform-origin: bottom center;
-            animation-fill-mode: forwards;
-        }
-        
-        .flip-card.flipping .flip-card-back-top {
-            animation: flipBackTop 0.5s ease-in-out;
-            transform-origin: bottom center;
-            animation-fill-mode: forwards;
-        }
-        
+        /* Animation for top card flipping down */
         @keyframes flipTop {
             0% {
                 transform: rotateX(0deg);
-                z-index: 3;
             }
             100% {
                 transform: rotateX(-180deg);
-                z-index: 1;
             }
         }
         
-        @keyframes flipBackTop {
+        /* Animation for bottom card flipping */
+        @keyframes flipBottom {
             0% {
-                transform: rotateX(180deg);
-                z-index: 1;
+                transform: rotateX(0deg);
             }
             100% {
-                transform: rotateX(0deg);
-                z-index: 3;
+                transform: rotateX(180deg);
             }
+        }
+        
+        .flip-card.active .flip-card-top {
+            animation: flipTop 0.3s ease-in;
+            animation-fill-mode: forwards;
+        }
+        
+        .flip-card.active .flip-card-bottom {
+            animation: flipBottom 0.3s ease-out;
+            animation-fill-mode: forwards;
+            animation-delay: 0.3s;
         }
         
         .flip-card-timestamp {
             display: none;
         }
         
+        /* Improved Mobile Responsiveness */
         @media (max-width: 480px) {
             .card {
-                padding: 1.5rem 1rem;
+                padding: 1.5rem 0.75rem;
+            }
+            
+            .flip-clock {
+                gap: 2px;
+                margin: 0 auto 1rem;
+                width: 100%;
+                justify-content: center;
+                transform: scale(0.85);
+                transform-origin: center top;
             }
             
             .flip-card {
-                width: 35px;
-                height: 45px;
+                width: 30px;
+                height: 40px;
+                margin: 0;
             }
             
             .flip-card-digit {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
             }
             
             .flip-card-top .flip-card-digit,
             .flip-card-back-top .flip-card-digit {
-                bottom: -22.5px;
-                height: 45px;
+                bottom: -20px;
+                height: 40px;
             }
             
             .flip-card-bottom .flip-card-digit,
             .flip-card-back-bottom .flip-card-digit {
-                top: -22.5px;
-                height: 45px;
+                top: -20px;
+                height: 40px;
             }
             
             .flip-clock-divider {
-                height: 45px;
+                height: 40px;
+                margin: 0;
             }
             
             .flip-clock-divider span {
-                width: 4px;
-                height: 4px;
-                margin: 6px 0;
+                width: 3px;
+                height: 3px;
+                margin: 5px 0;
+            }
+            
+            .flip-clock-label {
+                font-size: 0.6rem;
+                letter-spacing: 0;
+            }
+            
+            .flip-clock-section {
+                margin: 0;
             }
         }
     </style>
@@ -365,8 +517,12 @@
             <div class="flip-clock" id="flip-clock">
                 <!-- Flip clock will be generated by JavaScript -->
             </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
             <div class="days-label">Time of freedom</div>
             <p class="streak-info" id="streak-info">Your journey begins today!</p>
+            <div class="achievement-message" id="achievement-message"></div>
             
             <button class="button" id="milestone-btn">Add a milestone</button>
             <button class="button button-danger" id="reset-btn">Reset counter</button>
@@ -378,24 +534,30 @@
                 <div class="milestone">
                     <span class="milestone-day">1</span>
                     <span>First day completed</span>
+                    <button class="milestone-delete">×</button>
                 </div>
                 <div class="milestone">
                     <span class="milestone-day">7</span>
                     <span>One week milestone</span>
+                    <button class="milestone-delete">×</button>
                 </div>
                 <div class="milestone">
                     <span class="milestone-day">30</span>
                     <span>One month strong</span>
+                    <button class="milestone-delete">×</button>
                 </div>
                 <div class="milestone">
                     <span class="milestone-day">90</span>
                     <span>90-day transformation</span>
+                    <button class="milestone-delete">×</button>
                 </div>
             </div>
         </div>
         
         <p class="quote">"Every day is a new opportunity to improve yourself. Don't give up."</p>
     </div>
+    
+    <div class="confetti-container" id="confetti-container"></div>
     
     <footer>
         Recovery Journey Tracker &copy; 2025
@@ -429,10 +591,11 @@
             }
         }
         
-        // Create a flip card element - FIXED VERSION
+        // Create a flip card element - IMPROVED VERSION
         function createFlipCard(value) {
             const flipCard = document.createElement('div');
             flipCard.className = 'flip-card';
+            flipCard.setAttribute('data-value', value);
             
             // Create the top half
             const topCard = document.createElement('div');
@@ -466,16 +629,11 @@
             backBottomDigit.textContent = value;
             backBottomCard.appendChild(backBottomDigit);
             
-            // Add timestamp (for tracking last flip)
-            const timestamp = document.createElement('div');
-            timestamp.className = 'flip-card-timestamp';
-            
             // Assemble the card
             flipCard.appendChild(topCard);
             flipCard.appendChild(bottomCard);
             flipCard.appendChild(backTopCard);
             flipCard.appendChild(backBottomCard);
-            flipCard.appendChild(timestamp);
             
             return flipCard;
         }
@@ -569,13 +727,48 @@
             );
             clockContainer.appendChild(secondsSection);
             
-            // Store the current time in each timestamp element
-            document.querySelectorAll('.flip-card-timestamp').forEach(el => {
-                el.textContent = Date.now();
-            });
+            // Set last values to track changes
+            window.lastFlipValues = [
+                Math.floor(days / 10), days % 10,
+                Math.floor(hours / 10), hours % 10,
+                Math.floor(minutes / 10), minutes % 10,
+                Math.floor(seconds / 10), seconds % 10
+            ];
         }
         
-        // Update the flip clock - FIXED VERSION
+        // Flip a card to show a new value
+        function flipCard(card, newValue) {
+            // Only flip if the value is actually changing
+            if (card.getAttribute('data-value') === String(newValue)) {
+                return;
+            }
+            
+            // Update back cards with new value
+            const backTop = card.querySelector('.flip-card-back-top .flip-card-digit');
+            const backBottom = card.querySelector('.flip-card-back-bottom .flip-card-digit');
+            backTop.textContent = newValue;
+            backBottom.textContent = newValue;
+            
+            // Start the flip animation
+            card.classList.add('active');
+            
+            // After animation completes
+            setTimeout(() => {
+                // Update front cards with new value
+                const frontTop = card.querySelector('.flip-card-top .flip-card-digit');
+                const frontBottom = card.querySelector('.flip-card-bottom .flip-card-digit');
+                frontTop.textContent = newValue;
+                frontBottom.textContent = newValue;
+                
+                // Remove animation class
+                card.classList.remove('active');
+                
+                // Store current value
+                card.setAttribute('data-value', String(newValue));
+            }, 600); // Wait for both animations to complete
+        }
+        
+        // Update the flip clock - SIMPLIFIED VERSION
         function updateFlipClock() {
             // Get the start date
             const startDate = new Date(loadStartDate());
@@ -590,7 +783,7 @@
             const minutes = Math.floor((totalSeconds % 3600) / 60);
             const seconds = totalSeconds % 60;
             
-            // Update the flip cards
+            // Current values
             const values = [
                 Math.floor(days / 10), days % 10,
                 Math.floor(hours / 10), hours % 10,
@@ -598,44 +791,27 @@
                 Math.floor(seconds / 10), seconds % 10
             ];
             
+            // Last values from previous update
+            const lastValues = window.lastFlipValues || values;
+            
             // Get all flip cards
             const flipCards = document.querySelectorAll('.flip-card');
             
             if (flipCards.length !== 8) {
-                // If the structure is not ready, just initialize
+                // If the structure is not ready, reinitialize
                 initializeFlipClock();
                 return;
             }
             
-            // Update each flip card
-            flipCards.forEach((card, index) => {
-                const value = String(values[index]);
-                const timestamp = card.querySelector('.flip-card-timestamp');
-                const lastUpdate = parseInt(timestamp.textContent);
-                const now = Date.now();
-                
-                // Get the current displayed value from the top card
-                const currentValue = card.querySelector('.flip-card-top .flip-card-digit').textContent;
-                
-                // Only flip if the value has changed and enough time has passed since last flip
-                if (currentValue !== value && (now - lastUpdate) > 100) {
-                    
-                    // Update the back cards first (these will be revealed)
-                    card.querySelector('.flip-card-back-top .flip-card-digit').textContent = value;
-                    card.querySelector('.flip-card-back-bottom .flip-card-digit').textContent = value;
-                    
-                    // Add the flipping class to animate
-                    card.classList.add('flipping');
-                    
-                    // After animation completes, update the front cards
-                    setTimeout(() => {
-                        card.classList.remove('flipping');
-                        card.querySelector('.flip-card-top .flip-card-digit').textContent = value;
-                        card.querySelector('.flip-card-bottom .flip-card-digit').textContent = value;
-                        timestamp.textContent = Date.now();
-                    }, 500);
+            // Update each card if value changed
+            for (let i = 0; i < 8; i++) {
+                if (values[i] !== lastValues[i]) {
+                    flipCard(flipCards[i], values[i]);
                 }
-            });
+            }
+            
+            // Store values for next comparison
+            window.lastFlipValues = [...values];
         }
         
         // Update the counter
@@ -658,21 +834,6 @@
             updateMilestones(days);
         }
         
-        // Update milestones based on current streak
-        function updateMilestones(currentDays) {
-            const milestones = document.querySelectorAll('.milestone');
-            milestones.forEach(milestone => {
-                const daySpan = milestone.querySelector('.milestone-day');
-                const targetDay = parseInt(daySpan.textContent);
-                
-                if (currentDays >= targetDay) {
-                    milestone.classList.add('milestone-complete');
-                } else {
-                    milestone.classList.remove('milestone-complete');
-                }
-            });
-        }
-        
         // Reset the counter
         function resetCounter() {
             if (confirm('Are you sure you want to reset your counter? This will set today as your new start date.')) {
@@ -683,6 +844,176 @@
             }
         }
         
+        // Show confetti animation
+        function showConfetti() {
+            const container = document.getElementById('confetti-container');
+            container.style.display = 'block';
+            container.innerHTML = '';
+
+            const colors = ['#ffd700', '#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff'];
+            
+            // Create confetti pieces
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random shape
+                if (Math.random() > 0.6) {
+                    confetti.style.borderRadius = '50%';
+                } else if (Math.random() > 0.6) {
+                    confetti.style.width = '7px';
+                    confetti.style.height = '7px';
+                    confetti.style.transform = 'rotate(45deg)';
+                }
+                
+                // Random size
+                const size = Math.random() * 12 + 5;
+                confetti.style.width = size + 'px';
+                confetti.style.height = size + 'px';
+                
+                // Random animation speed
+                const animationSpeed = ['slow', 'medium', 'fast'];
+                confetti.classList.add(animationSpeed[Math.floor(Math.random() * animationSpeed.length)]);
+                
+                container.appendChild(confetti);
+            }
+            
+            // Remove confetti after animations complete
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 4000);
+        }
+
+        // Update progress bar
+        function updateProgressBar(currentDays) {
+            const progressBar = document.getElementById('progress-bar');
+            const nextMilestone = getNextMilestone(currentDays);
+            
+            if (nextMilestone) {
+                const prevMilestone = getPreviousMilestone(currentDays);
+                const prevDay = prevMilestone ? parseInt(prevMilestone.day) : 0;
+                const progress = ((currentDays - prevDay) / (nextMilestone.day - prevDay)) * 100;
+                progressBar.style.width = progress + '%';
+            } else {
+                // All milestones completed
+                progressBar.style.width = '100%';
+            }
+        }
+        
+        // Get the next milestone
+        function getNextMilestone(currentDays) {
+            const milestones = [];
+            document.querySelectorAll('.milestone').forEach(milestone => {
+                const day = parseInt(milestone.querySelector('.milestone-day').textContent);
+                const desc = milestone.querySelector('span:nth-child(2)').textContent;
+                milestones.push({ day, desc });
+            });
+            
+            milestones.sort((a, b) => a.day - b.day);
+            
+            for (const milestone of milestones) {
+                if (milestone.day > currentDays) {
+                    return milestone;
+                }
+            }
+            
+            return null; // All milestones completed
+        }
+        
+        // Get the previous completed milestone
+        function getPreviousMilestone(currentDays) {
+            const milestones = [];
+            document.querySelectorAll('.milestone').forEach(milestone => {
+                const day = parseInt(milestone.querySelector('.milestone-day').textContent);
+                const desc = milestone.querySelector('span:nth-child(2)').textContent;
+                milestones.push({ day, desc });
+            });
+            
+            milestones.sort((a, b) => b.day - a.day); // Sort descending
+            
+            for (const milestone of milestones) {
+                if (milestone.day <= currentDays) {
+                    return milestone;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Update achievement message
+        function updateAchievementMessage(currentDays) {
+            const achievementMsg = document.getElementById('achievement-message');
+            const milestones = document.querySelectorAll('.milestone');
+            const justCompletedMilestones = [];
+            
+            // Check for just-completed milestones (within the last day)
+            milestones.forEach(milestone => {
+                const daySpan = milestone.querySelector('.milestone-day');
+                const targetDay = parseInt(daySpan.textContent);
+                const description = milestone.querySelector('span:nth-child(2)').textContent;
+                
+                if (targetDay === currentDays) {
+                    justCompletedMilestones.push({ day: targetDay, desc: description });
+                }
+            });
+            
+            if (justCompletedMilestones.length > 0) {
+                // Show achievement message and confetti
+                const milestone = justCompletedMilestones[0]; // Just show the first one if multiple
+                achievementMsg.textContent = `🎉 Congratulations! You've reached day ${milestone.day}: "${milestone.desc}"`;
+                achievementMsg.style.display = 'block';
+                showConfetti();
+            } else {
+                achievementMsg.style.display = 'none';
+            }
+        }
+        
+        // Update milestones based on current streak
+        function updateMilestones(currentDays) {
+            const milestones = document.querySelectorAll('.milestone');
+            let justCompleted = false;
+            
+            milestones.forEach(milestone => {
+                const daySpan = milestone.querySelector('.milestone-day');
+                const targetDay = parseInt(daySpan.textContent);
+                const wasComplete = milestone.classList.contains('milestone-complete');
+                
+                if (currentDays >= targetDay) {
+                    milestone.classList.add('milestone-complete');
+                    
+                    // Check if this milestone was just completed
+                    if (!wasComplete && currentDays === targetDay) {
+                        justCompleted = true;
+                    }
+                } else {
+                    milestone.classList.remove('milestone-complete');
+                }
+            });
+            
+            // Update progress bar
+            updateProgressBar(currentDays);
+            
+            // Show achievement message for newly completed milestones
+            updateAchievementMessage(currentDays);
+            
+            return justCompleted;
+        }
+        
+        // Delete a milestone
+        function deleteMilestone(event) {
+            const milestone = event.target.closest('.milestone');
+            if (milestone && confirm('Are you sure you want to delete this milestone?')) {
+                milestone.remove();
+                saveMilestones();
+                
+                // Update milestone status and progress
+                const currentDays = daysBetween(loadStartDate(), getCurrentDate());
+                updateMilestones(currentDays);
+            }
+        }
+
         // Add a custom milestone
         function addMilestone() {
             const targetDay = prompt('Enter the day for your milestone:');
@@ -699,8 +1030,14 @@
                 const descSpan = document.createElement('span');
                 descSpan.textContent = description;
                 
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'milestone-delete';
+                deleteBtn.innerHTML = '×';
+                deleteBtn.addEventListener('click', deleteMilestone);
+                
                 milestone.appendChild(daySpan);
                 milestone.appendChild(descSpan);
+                milestone.appendChild(deleteBtn);
                 
                 document.getElementById('milestones-list').appendChild(milestone);
                 
@@ -708,10 +1045,14 @@
                 const currentDays = daysBetween(loadStartDate(), getCurrentDate());
                 if (currentDays >= parseInt(targetDay)) {
                     milestone.classList.add('milestone-complete');
+                    showConfetti();
                 }
                 
                 // Save to localStorage
                 saveMilestones();
+                
+                // Update progress bar
+                updateProgressBar(currentDays);
             }
         }
         
@@ -746,14 +1087,21 @@
                     const descSpan = document.createElement('span');
                     descSpan.textContent = item.desc;
                     
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'milestone-delete';
+                    deleteBtn.innerHTML = '×';
+                    deleteBtn.addEventListener('click', deleteMilestone);
+                    
                     milestone.appendChild(daySpan);
                     milestone.appendChild(descSpan);
+                    milestone.appendChild(deleteBtn);
                     container.appendChild(milestone);
                 });
                 
                 // Update milestone statuses
                 const currentDays = daysBetween(loadStartDate(), getCurrentDate());
                 updateMilestones(currentDays);
+                updateProgressBar(currentDays);
             }
         }
         
@@ -762,11 +1110,19 @@
             // Initialize flip clock
             initializeFlipClock();
             
+            // Immediately trigger a clock update to ensure it's visible
+            updateFlipClock();
+            
             // Set up reset button
             document.getElementById('reset-btn').addEventListener('click', resetCounter);
             
             // Set up milestone button
             document.getElementById('milestone-btn').addEventListener('click', addMilestone);
+            
+            // Set up delete buttons
+            document.querySelectorAll('.milestone-delete').forEach(btn => {
+                btn.addEventListener('click', deleteMilestone);
+            });
             
             // Load milestones
             loadMilestones();
@@ -774,10 +1130,26 @@
             // Update counter on page load
             updateCounter();
             
+            // Generate random motivational quote
+            const quotes = [
+                "Every day is a new opportunity to improve yourself. Don't give up.",
+                "Progress is progress, no matter how small.",
+                "You're stronger than you think. Keep going!",
+                "Your determination today shapes your success tomorrow.",
+                "The journey of a thousand miles begins with a single step.",
+                "Every day clean is a victory worth celebrating.",
+                "You've come too far to give up now.",
+                "Be proud of how far you've come and have faith in how far you can go.",
+                "Recovery isn't just about stopping; it's about creating a new life."
+            ];
+            
+            document.querySelector('.quote').textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+            
             // Update the flip clock every second
-            setInterval(() => {
-                updateFlipClock();
-            }, 1000);
+            const clockInterval = setInterval(updateFlipClock, 1000);
+            
+            // Force the first update
+            updateFlipClock();
         });
     </script>
 </body>
