@@ -579,6 +579,82 @@
       <p class="quote">
         "Every day is a new opportunity to improve yourself. Don't give up."
       </p>
+
+      <div class="card">
+        <h2>Motivation Center</h2>
+        <div class="motivation-tabs">
+          <button class="tab-button active" data-tab="benefits">
+            Benefits
+          </button>
+          <button class="tab-button" data-tab="affirmations">
+            Daily Affirmations
+          </button>
+          <button class="tab-button" data-tab="visualize">Visualization</button>
+        </div>
+
+        <div class="tab-content active" id="benefits-content">
+          <h3>Benefits of Your Recovery Journey</h3>
+          <div class="benefits-timeline">
+            <div class="benefit-item">
+              <div class="benefit-day">Day 1-7</div>
+              <div class="benefit-desc">
+                <strong>Early Healing:</strong> Your body begins to restore
+                itself. Sleep improves, energy levels start to normalize, and
+                mental clarity begins to return.
+              </div>
+            </div>
+            <div class="benefit-item">
+              <div class="benefit-day">Day 8-30</div>
+              <div class="benefit-desc">
+                <strong>Mental Shift:</strong> Brain chemistry starts balancing.
+                Mood swings decrease, anxiety reduces, and you'll experience
+                more moments of natural joy.
+              </div>
+            </div>
+            <div class="benefit-item">
+              <div class="benefit-day">Day 31-90</div>
+              <div class="benefit-desc">
+                <strong>New Identity:</strong> You begin to see yourself
+                differently. Confidence grows, relationships improve, and new
+                healthy habits become established.
+              </div>
+            </div>
+            <div class="benefit-item">
+              <div class="benefit-day">Day 91+</div>
+              <div class="benefit-desc">
+                <strong>Transformed Life:</strong> You've created sustainable
+                change. Your resilience is stronger, you have healthier coping
+                mechanisms, and your future is brighter.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="affirmations-content">
+          <h3>Today's Affirmations</h3>
+          <div class="affirmations-container" id="affirmations-container">
+            <!-- Affirmations will be populated by JavaScript -->
+          </div>
+          <button class="button button-secondary" id="new-affirmation-btn">
+            New Affirmation
+          </button>
+        </div>
+
+        <div class="tab-content" id="visualize-content">
+          <h3>Visualization Exercise</h3>
+          <p class="visualization-intro">
+            Take a moment to visualize your recovery success:
+          </p>
+          <div class="visualization-prompt" id="visualization-prompt">
+            Close your eyes and imagine yourself one year from now, free from
+            what once held you back. How do you feel? What are you doing
+            differently? Who are you spending time with?
+          </div>
+          <button class="button button-secondary" id="new-visualization-btn">
+            New Prompt
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="confetti-container" id="confetti-container"></div>
@@ -586,6 +662,123 @@
     <footer>Recovery Journey Tracker &copy; 2025</footer>
 
     <script>
+      // CSS for new motivation sections
+      document.head.insertAdjacentHTML(
+        "beforeend",
+        `
+        <style>
+          .motivation-tabs {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            overflow-x: auto;
+          }
+          
+          .tab-button {
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+          }
+          
+          .tab-button:hover {
+            color: var(--primary);
+          }
+          
+          .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+          }
+          
+          .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+          }
+          
+          .tab-content.active {
+            display: block;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          
+          .benefits-timeline {
+            margin-top: 1rem;
+          }
+          
+          .benefit-item {
+            padding: 0.75rem;
+            border-left: 2px solid var(--primary);
+            margin-left: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            background-color: rgba(79, 70, 229, 0.05);
+            border-radius: 0 8px 8px 0;
+          }
+          
+          .benefit-day {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+          }
+          
+          .benefit-desc {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.4;
+          }
+          
+          .benefit-item:before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            left: -7px;
+            top: 1rem;
+          }
+          
+          .affirmations-container {
+            background-color: rgba(16, 185, 129, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 500;
+            color: var(--text);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .visualization-intro {
+            margin-bottom: 1rem;
+          }
+          
+          .visualization-prompt {
+            background-color: rgba(6, 182, 212, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 120px;
+          }
+        </style>
+      `
+      );
+
       // Get the current date in YYYY-MM-DD format
       function getCurrentDate() {
         const now = new Date();
@@ -594,7 +787,6 @@
           "0"
         )}-${String(now.getDate()).padStart(2, "0")}`;
       }
-
       // Calculate days between two dates
       function daysBetween(startDate, endDate) {
         const start = new Date(startDate);
@@ -1212,15 +1404,127 @@
           "You've come too far to give up now.",
           "Be proud of how far you've come and have faith in how far you can go.",
           "Recovery isn't just about stopping; it's about creating a new life.",
+          "Fall down seven times, stand up eight.",
+          "Your future self is watching you right now through memories.",
+          "The best time to plant a tree was 20 years ago. The second best time is now.",
+          "Recovery is not a race; you don't have to feel guilty if it takes you longer than you thought it would.",
+          "The only person you should try to be better than is the person you were yesterday.",
+          "Small steps lead to big changes.",
+          "Every moment is a fresh beginning.",
+          "Trust the process. Your time is coming.",
+          "You are not defined by your past. You are prepared by it.",
+          "The harder the battle, the sweeter the victory.",
+          "Recovery is about progression, not perfection.",
+          "The strongest people are not those who show strength in front of us but those who win battles we know nothing about.",
+          "It's okay to not be okay as long as you're not giving up.",
+          "Today I am better than I was yesterday, and tomorrow I will be better than I am today.",
+          "The pain you feel today will be the strength you feel tomorrow.",
+          "Courage doesn't always roar. Sometimes it's the quiet voice saying 'I will try again tomorrow'.",
+          "Your recovery is a testament to your strength.",
+          "When you feel like quitting, remember why you started.",
+          "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+          "Every accomplishment begins with the decision to try.",
+          "Healing is not linear. It's okay to have setbacks, just don't give up.",
         ];
 
         document.querySelector(".quote").textContent = `"${
           quotes[Math.floor(Math.random() * quotes.length)]
         }"`;
 
+        // Affirmations array
+        const affirmations = [
+          "I am stronger than my challenges and braver than my fears.",
+          "Every day I'm getting healthier and stronger.",
+          "I have the power to change my story.",
+          "My recovery journey is worth every effort I make.",
+          "I deserve happiness and a healthy life.",
+          "I am capable of amazing change.",
+          "My potential is limitless.",
+          "I am in control of my choices and my future.",
+          "Today, I choose progress over perfection.",
+          "I am resilient and can overcome any obstacle.",
+          "I am worthy of a healthy, balanced life.",
+          "I trust in my ability to make positive changes.",
+          "My struggles do not define me; my strength does.",
+          "I am creating a life I love.",
+          "Every step forward is a victory worth celebrating.",
+          "I am patient with myself as I heal and grow.",
+          "I release the past and embrace my new beginning.",
+          "I am committed to my well-being.",
+          "I radiate strength, resilience, and determination.",
+          "I am not alone in this journey.",
+        ];
+
+        // Visualization prompts
+        const visualizationPrompts = [
+          "Imagine waking up one year from now. You feel refreshed, energized, and at peace. What does your morning routine look like? What thoughts go through your mind?",
+          "Picture yourself in a situation that used to trigger you, but now you're handling it with ease and confidence. What new skills or strengths do you have?",
+          "Visualize someone close to you noticing how far you've come. What changes do they see in you? How does their recognition make you feel?",
+          "See yourself engaged in a healthy activity that brings you joy. What are you doing? Who are you with? How does it feel to be fully present?",
+          "Imagine writing a letter to your future self describing your recovery journey. What obstacles did you overcome? What are you most proud of?",
+          "Picture yourself helping someone who is where you once were. What wisdom would you share? How does it feel to be a source of inspiration?",
+          "Visualize a peaceful place where you feel completely safe and content. What does it look like? What sounds do you hear? How does it feel to be there?",
+          "See yourself celebrating a significant recovery milestone. Who is celebrating with you? How are you commemorating this achievement?",
+          "Imagine your life free from what once held you back. What new opportunities are available to you? What dreams are you pursuing?",
+          "Picture the healthy relationships in your life growing stronger. How have they improved? What new connections have you made?",
+        ];
+
+        // Tab functionality
+        function setupTabs() {
+          const tabButtons = document.querySelectorAll(".tab-button");
+          const tabContents = document.querySelectorAll(".tab-content");
+
+          tabButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+              // Deactivate all tabs
+              tabButtons.forEach((btn) => btn.classList.remove("active"));
+              tabContents.forEach((content) =>
+                content.classList.remove("active")
+              );
+
+              // Activate selected tab
+              button.classList.add("active");
+              const tabName = button.getAttribute("data-tab");
+              document
+                .getElementById(`${tabName}-content`)
+                .classList.add("active");
+            });
+          });
+        }
+
+        // Show random affirmation
+        function showRandomAffirmation() {
+          const container = document.getElementById("affirmations-container");
+          container.textContent =
+            affirmations[Math.floor(Math.random() * affirmations.length)];
+        }
+
+        // Show random visualization prompt
+        function showRandomVisualization() {
+          const container = document.getElementById("visualization-prompt");
+          container.textContent =
+            visualizationPrompts[
+              Math.floor(Math.random() * visualizationPrompts.length)
+            ];
+        }
+
         // Update the flip clock every second
         const clockInterval = setInterval(updateFlipClock, 1000);
 
+        // Setup motivation tabs
+        setupTabs();
+
+        // Initialize affirmations and visualization
+        showRandomAffirmation();
+        showRandomVisualization();
+
+        // Setup button listeners for affirmations and visualization
+        document
+          .getElementById("new-affirmation-btn")
+          .addEventListener("click", showRandomAffirmation);
+        document
+          .getElementById("new-visualization-btn")
+          .addEventListener("click", showRandomVisualization);
         // Force the first update
         updateFlipClock();
       });
