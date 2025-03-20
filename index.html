@@ -582,78 +582,75 @@
 
       <div class="card">
         <h2>Motivation Center</h2>
-        <div class="motivation-tabs">
-          <button class="tab-button active" data-tab="benefits">
-            Benefits
-          </button>
-          <button class="tab-button" data-tab="affirmations">
-            Daily Affirmations
-          </button>
-          <button class="tab-button" data-tab="visualize">Visualization</button>
-        </div>
-
-        <div class="tab-content active" id="benefits-content">
-          <h3>Benefits of Your Recovery Journey</h3>
-          <div class="benefits-timeline">
-            <div class="benefit-item">
-              <div class="benefit-day">Day 1-7</div>
-              <div class="benefit-desc">
-                <strong>Early Healing:</strong> Your body begins to restore
-                itself. Sleep improves, energy levels start to normalize, and
-                mental clarity begins to return.
+        <div class="motivation-sections">
+          <div class="motivation-section" id="benefits-section">
+            <h3>Benefits of Your Recovery Journey</h3>
+            <div class="benefits-timeline">
+              <div class="benefit-item">
+                <div class="benefit-day">Day 1-7</div>
+                <div class="benefit-desc">
+                  <strong>Early Healing:</strong> Your body begins to restore
+                  itself. Sleep improves, energy levels start to normalize, and
+                  mental clarity begins to return.
+                </div>
               </div>
-            </div>
-            <div class="benefit-item">
-              <div class="benefit-day">Day 8-30</div>
-              <div class="benefit-desc">
-                <strong>Mental Shift:</strong> Brain chemistry starts balancing.
-                Mood swings decrease, anxiety reduces, and you'll experience
-                more moments of natural joy.
+              <div class="benefit-item">
+                <div class="benefit-day">Day 8-30</div>
+                <div class="benefit-desc">
+                  <strong>Mental Shift:</strong> Brain chemistry starts balancing.
+                  Mood swings decrease, anxiety reduces, and you'll experience
+                  more moments of natural joy.
+                </div>
               </div>
-            </div>
-            <div class="benefit-item">
-              <div class="benefit-day">Day 31-90</div>
-              <div class="benefit-desc">
-                <strong>New Identity:</strong> You begin to see yourself
-                differently. Confidence grows, relationships improve, and new
-                healthy habits become established.
+              <div class="benefit-item">
+                <div class="benefit-day">Day 31-90</div>
+                <div class="benefit-desc">
+                  <strong>New Identity:</strong> You begin to see yourself
+                  differently. Confidence grows, relationships improve, and new
+                  healthy habits become established.
+                </div>
               </div>
-            </div>
-            <div class="benefit-item">
-              <div class="benefit-day">Day 91+</div>
-              <div class="benefit-desc">
-                <strong>Transformed Life:</strong> You've created sustainable
-                change. Your resilience is stronger, you have healthier coping
-                mechanisms, and your future is brighter.
+              <div class="benefit-item">
+                <div class="benefit-day">Day 91+</div>
+                <div class="benefit-desc">
+                  <strong>Transformed Life:</strong> You've created sustainable
+                  change. Your resilience is stronger, you have healthier coping
+                  mechanisms, and your future is brighter.
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="tab-content" id="affirmations-content">
-          <h3>Today's Affirmations</h3>
-          <div class="affirmations-container" id="affirmations-container">
-            <!-- Affirmations will be populated by JavaScript -->
+          <div class="motivation-section" id="affirmations-section">
+            <h3>Daily Affirmations</h3>
+            <div class="affirmations-carousel">
+              <div class="affirmations-container" id="affirmations-container">
+                <!-- Affirmations will be populated by JavaScript -->
+              </div>
+              <div class="carousel-indicator">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
           </div>
-          <button class="button button-secondary" id="new-affirmation-btn">
-            New Affirmation
-          </button>
-        </div>
 
-        <div class="tab-content" id="visualize-content">
-          <h3>Visualization Exercise</h3>
-          <p class="visualization-intro">
-            Take a moment to visualize your recovery success:
-          </p>
-          <div class="visualization-prompt" id="visualization-prompt">
-            Close your eyes and imagine yourself one year from now, free from
-            what once held you back. How do you feel? What are you doing
-            differently? Who are you spending time with?
+          <div class="motivation-section" id="visualize-section">
+            <h3>Visualization Exercise</h3>
+            <p class="visualization-intro">
+              Take a moment to visualize your recovery success:
+            </p>
+            <div class="visualization-carousel">
+              <div class="visualization-prompt" id="visualization-prompt">
+                <!-- Visualization prompts will be populated by JavaScript -->
+              </div>
+              <div class="carousel-indicator">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
           </div>
-          <button class="button button-secondary" id="new-visualization-btn">
-            New Prompt
-          </button>
-        </div>
       </div>
     </div>
 
@@ -667,41 +664,20 @@
         "beforeend",
         `
         <style>
-          .motivation-tabs {
+          .motivation-sections {
             display: flex;
-            margin-bottom: 1rem;
+            flex-direction: column;
+            gap: 2rem;
+          }
+          
+          .motivation-section {
+            padding-bottom: 1.5rem;
             border-bottom: 1px solid #e5e7eb;
-            overflow-x: auto;
+            animation: fadeIn 0.5s ease;
           }
           
-          .tab-button {
-            background: none;
-            border: none;
-            padding: 0.75rem 1rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-          }
-          
-          .tab-button:hover {
-            color: var(--primary);
-          }
-          
-          .tab-button.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-          }
-          
-          .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-          }
-          
-          .tab-content.active {
-            display: block;
+          .motivation-section:last-child {
+            border-bottom: none;
           }
           
           @keyframes fadeIn {
@@ -714,13 +690,19 @@
           }
           
           .benefit-item {
-            padding: 0.75rem;
-            border-left: 2px solid var(--primary);
-            margin-left: 1rem;
-            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-left: 5px solid var(--primary);
+            margin-bottom: 1.25rem;
             position: relative;
             background-color: rgba(79, 70, 229, 0.05);
             border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }
+          
+          .benefit-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
           }
           
           .benefit-day {
@@ -735,15 +717,10 @@
             line-height: 1.4;
           }
           
-          .benefit-item:before {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            left: -7px;
-            top: 1rem;
+          .affirmations-carousel,
+          .visualization-carousel {
+            position: relative;
+            overflow: hidden;
           }
           
           .affirmations-container {
@@ -759,6 +736,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: opacity 0.5s ease;
           }
           
           .visualization-intro {
@@ -774,6 +752,34 @@
             color: var(--text);
             line-height: 1.5;
             min-height: 120px;
+            transition: opacity 0.5s ease;
+          }
+          
+          .carousel-indicator {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+          }
+          
+          .dot {
+            height: 8px;
+            width: 8px;
+            margin: 0 4px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+          }
+          
+          .dot.active {
+            background-color: var(--primary);
+          }
+          
+          @keyframes fadeInOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
           }
         </style>
       `
@@ -1364,7 +1370,7 @@
         }
       }
 
-      // Initialize the page
+        // Initialize the page
       document.addEventListener("DOMContentLoaded", () => {
         // Initialize flip clock
         initializeFlipClock();
@@ -1469,62 +1475,66 @@
           "Picture the healthy relationships in your life growing stronger. How have they improved? What new connections have you made?",
         ];
 
-        // Tab functionality
-        function setupTabs() {
-          const tabButtons = document.querySelectorAll(".tab-button");
-          const tabContents = document.querySelectorAll(".tab-content");
-
-          tabButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-              // Deactivate all tabs
-              tabButtons.forEach((btn) => btn.classList.remove("active"));
-              tabContents.forEach((content) =>
-                content.classList.remove("active")
-              );
-
-              // Activate selected tab
-              button.classList.add("active");
-              const tabName = button.getAttribute("data-tab");
-              document
-                .getElementById(`${tabName}-content`)
-                .classList.add("active");
-            });
-          });
-        }
-
-        // Show random affirmation
-        function showRandomAffirmation() {
+        // Auto-rotating affirmations and visualizations
+        let currentAffirmationIndex = 0;
+        let currentVisualizationIndex = 0;
+        
+        function rotateAffirmations() {
           const container = document.getElementById("affirmations-container");
-          container.textContent =
-            affirmations[Math.floor(Math.random() * affirmations.length)];
+          const dots = document.querySelectorAll("#affirmations-section .dot");
+          
+          // Fade out
+          container.style.opacity = 0;
+          
+          setTimeout(() => {
+            // Update content while it's invisible
+            currentAffirmationIndex = (currentAffirmationIndex + 1) % affirmations.length;
+            container.textContent = affirmations[currentAffirmationIndex];
+            
+            // Update indicator dots
+            dots.forEach((dot, i) => {
+              dot.classList.toggle("active", i === currentAffirmationIndex % 3);
+            });
+            
+            // Fade in
+            container.style.opacity = 1;
+          }, 500);
         }
-
-        // Show random visualization prompt
-        function showRandomVisualization() {
+        
+        function rotateVisualizations() {
           const container = document.getElementById("visualization-prompt");
-          container.textContent =
-            visualizationPrompts[
-              Math.floor(Math.random() * visualizationPrompts.length)
-            ];
+          const dots = document.querySelectorAll("#visualize-section .dot");
+          
+          // Fade out
+          container.style.opacity = 0;
+          
+          setTimeout(() => {
+            // Update content while it's invisible
+            currentVisualizationIndex = (currentVisualizationIndex + 1) % visualizationPrompts.length;
+            container.textContent = visualizationPrompts[currentVisualizationIndex];
+            
+            // Update indicator dots
+            dots.forEach((dot, i) => {
+              dot.classList.toggle("active", i === currentVisualizationIndex % 3);
+            });
+            
+            // Fade in
+            container.style.opacity = 1;
+          }, 500);
         }
 
         // Update the flip clock every second
         const clockInterval = setInterval(updateFlipClock, 1000);
 
-        // Setup motivation tabs
-        setupTabs();
-
-        // Initialize affirmations and visualization
-        showRandomAffirmation();
-        showRandomVisualization();
-
-        // Setup button listeners for affirmations and visualization
-        document
-          .getElementById("new-affirmation-btn")
-          .addEventListener("click", showRandomAffirmation);
-        document
-          .getElementById("new-visualization-btn")
-          .addEventListener("click", showRandomVisualization);
+        // Initialize affirmations and visualizations with first items
+        document.getElementById("affirmations-container").textContent = 
+          affirmations[currentAffirmationIndex];
+        document.getElementById("visualization-prompt").textContent = 
+          visualizationPrompts[currentVisualizationIndex];
+        
+        // Set up auto-rotation intervals
+        const affirmationInterval = setInterval(rotateAffirmations, 8000); // Change every 8 seconds
+        const visualizationInterval = setInterval(rotateVisualizations, 12000); // Change every 12 seconds
         // Force the first update
         updateFlipClock();
       });
